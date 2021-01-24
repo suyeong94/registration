@@ -1,0 +1,127 @@
+<!-- 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+jquery_02.html
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->
+<html>
+ <head>
+	<meta charset="Utf-8">
+	<script src="jquery-1.11.0.min.js"></script>
+	<script src="../JavaScript/common_js.js"></script>
+	<script src="common_jquery_func.js"></script>
+	<script>
+		//**************************************************
+		// $(document).ready(   function(){자스코딩}  );
+		//**************************************************
+			$(document).ready(function(){
+			// body 태그 안의 요소들을 읽어들인 후 익명함수 내부의 자스코딩을 실행.
+			// 년,월,일 날짜가 들어가는 함수
+			// insertYMD_to_select3 함수 호출로 아래 실행구문을 실행한다
+			// class=birth_year 를 가진 태그 내부에 년도 관련 option 태그 삽입하기
+			// class=birth_month 를 가진 태그 내부에 월 관련 option 태그 삽입하기
+			// class=birth_date 를 가진 태그 내부에 일 관련 option 태그 삽입하기
+			//------------------------------------------------------------------------------------------
+		insertYMD_to_select3(
+				$(".birth_year")							 // 년도 관련 select 태그를 관리하는 JQuery 객체
+				, $(".birth_month")					 // 월 관련 select 태그를 관리하는 JQuery 객체
+				, $(".birth_date")						 // 일 관련 select 태그를 관리하는 JQuery 객체
+				, 2000											// 최소년도
+				, new Date().getFullYear()	  // 최대년도
+				, 2												// 년도의 오름차순 또는 내림차순 옵션. 1이면 오름차순, 2면 내림차순
+		);
+//-----------------------------------------------------------------------------------------------		
+// class=birth_year, class=birth_month, class=birth_date 를 가진 3개의 태그에 
+// chang 이벤트가 발생하면 실행할 자스 코딩 설정하기
+//-----------------------------------------------------------------------------------------------	
+				$("birth_year,.birth_month,.birth_date").change(  function(){
+						//선택한 년,월,일을 얻어서 변수에 저장하기 
+						var birth_year = $(".birth_year").val();
+						var birth_month = $(".birth_month").val();
+						var birth_date = $(".birth_date").val();
+						// && 연산자는 둘 중 하나라도(true, false) 이렇게 나올 경우 false로 반환.
+						//-------------------------------------------------------------
+						// 년도가 비었는데 월이 있을경우 경고하고 년도 비우기
+						//-------------------------------------------------------------
+						if( isEmpty(birth_year) && isEmpty(birth_month)==false){
+						//if( isEmpty(birth_year) && !isEmpty(birth_month)   ){// 논리연산자로 위의 결과값과 같다.
+							alert("년도를 먼저 선택한 후 월을 입력해주세요");
+							// class=birth_month 를 가진 태그의 vaule값을 "" 로 하기
+							// class=birth_month 를 가진 태그가 select 태그 이므로 결국 "" 가진 option 태그가 선택되게 된다.
+							$(".birth_month").val(""); //  값을 세팅해줘라는 뜻. vaule값에 값이 없는것을 선택해주라 라는 뜻.
+						}
+						//-------------------------------------------------------------
+						// 월이 비었는데 일이 있을경우 경고하고 년도 비우기
+						//-------------------------------------------------------------
+						else if( isEmpty(birth_month) && isEmpty(birth_date)==false){
+							//if( isEmpty(birth_month) && !isEmpty(birth_date)   ){
+							alert(" 월을 먼저 선택한 후 일을 입력해주세요");
+							$(".birth_date").val("");
+						}
+						//-------------------------------------------------------------
+						// 년,월,일 모두가 비어있지 않으면 = 즉 년,월,일 모두 다 데이터가 있으면
+						//-------------------------------------------------------------
+							if( isEmpty(birth_year)==false && isEmpty(birth_month)==false&& isEmpty(birth_date)==false) {
+					//if( !isEmpty(birth_year) &&!isEmpty(birth_month)&&!isEmpty(birth_date)) {
+						//-------------------------------------------------------------
+						// 년,월에 맞는 일을 class=birth_date를 가진 태그 내부에 option 태그와 어울려서 삽입해주기
+						//-------------------------------------------------------------
+									insertValidDate(
+										$(".birth_year")				// 년도 관련 select 태그를 관리하는 JQuery 객체
+										,$(".birth_month")		// 월 관련 select 태그를 관리하는 Query 객체
+										,$(".birth_date")         // 일 관련 select 태그를 관리하는 Query 객체
+									);
+							}
+				})
+		});
+					
+	/*					
+         $(".birth_year").change(function(){
+            insertValidDate(
+               $(".birth_year"),   // 년도 관련 select 태그를 관리하는 JQuery 객체
+               $(".birth_month"),  // 월 관련 select 태그를 관리하는 Query 객체
+               $(".birth_date")    // 일 관련 select 태그를 관리하는 Query 객체
+            );
+         });
+         $(".birth_month").change(function(){
+            insertValidDate(
+               $(".birth_year"),   // 년도 관련 select 태그를 관리하는 JQuery 객체
+               $(".birth_month"),  // 월 관련 select 태그를 관리하는 Query 객체
+               $(".birth_date")    // 일 관련 select 태그를 관리하는 Query 객체
+            );
+         });
+			         //   isEmpty에 null 이거나 undefined 비교를 해주었기에 isEmpty에 쓰는게 좋다.
+						if(birth_year==null || birth_year==undefined && birth_year=="" && birth_month!=="") {
+								alert("년도를 먼저 선택한 후 월을 입력해주세요.");
+								$(".birth_month").val();   }
+							else if( birth_month=="" && birth_date!=="") {
+								alert("월을 먼저 선택한 후 일을 입력해주세요.");
+								$(".birth_date").val();   }
+		
+
+						if( isEmpty(birth_year) && isEmpty(birth_month)&& isEmpty(birth_date)==false) {
+							insertValidDate(
+							$(".birth_year")  			
+							, $(".birth_month")  		
+							,$(".birth_date")         
+						)
+					}
+					*/
+	</script>
+</head>
+<body>
+	<form>
+		<select name="birth_year" class="birth_year">
+			<option value="">
+		</select>년
+		<select name="birth_month" class="birth_month">
+			<option value="">
+		</select>월
+		<select name="birth_date" class="birth_date">
+			<option value="">
+		</select>일
+
+			<input type=reset value="초기화">
+	</form>
+</body>
+
+</html>  
