@@ -1,0 +1,96 @@
+
+
+<html>
+	<meta charset="Utf-8">
+ <head>
+ <script src="jquery-1.11.0.min.js"></script>
+<script>
+		//---------------------------------------------------------------------------
+		//	$(document).ready( function(){자스코딩}   );
+		//	 $ready (  function () { 자스코딩}    );
+		//  $(  function () { 자스코딩}    );
+		// body 태그 안의 요소들을 읽어들인 후 익명함수 내부의 자스코딩을 실행.
+		//---------------------------------------------------------------------------
+		$(document).ready( function(){
+			//---------------------------------------------
+			// id=movieList 를 가진 태그를 관리하는 JQuery 객체의 메위주를 변수 obj에 저장
+			//---------------------------------------------
+			var obj = $("#movieList");
+			//---------------------------------------------
+			// JQuery 객체 관리하는 태그의 후손 태그 중 짝수 tr 을 관리하는 JQuery 객체 생성하고
+			// hide  메소드 호출하여 감추기
+			//---------------------------------------------
+			obj.find("tr:odd").hide();
+			//---------------------------------------------
+			// JQuery 객체 관리하는 태그의 후손 태그 중 짝수 tr 을 관리하는 JQuery 객체 생성하고
+			// hover  메소드 호출하여 마우스 댔을 때 홀수 tr 보이게 하고 
+			//									마우스 빼면 홀수 tr 감추기
+			//---------------------------------------------
+			obj.find("tr:even").hover(
+				 function() { 
+					 // 마우스를 댄 순서번호 차원의 홀수(사람이 느끼는) tr의 다음  숨겨진 tr 보이기
+						 $(this).next().show();
+				 }
+				 ,function() {    
+				 // 마우스를 댄 순서번호 차원의 홀수 tr의 다음  숨겨진 tr 보이기
+						$(this).next().hide();
+				}
+
+			  );
+		} );
+
+			/*
+			// 짝수행을 감추기
+			$("#movieList tr:odd").hide();
+			//---------------------------------------------
+			// 홀수 tr 에 마우스 대면 마우스 댄  tr의 다음 tr만 보이기
+			//---------------------------------------------
+			$("#movieList tr:even").hover(
+				 function() { 
+					 // 마우스를 댄 홀수 tr의 다음  숨겨진 tr 보이기
+						 $(this).next().show()
+					 }
+				  ,function() {    
+						$(this).next().hide();
+					 }
+
+			  );
+			  */
+
+</script>
+ </head>
+
+ <body>
+	<table id="movieList" class="move" border=0  cellspacing=0 width=200 cellpadding=5>
+	<tr bgcolor=#0078C8>
+		<td><b>Action</b></td>
+	</tr>
+		<tr bgcolor=#DBF1FF>
+		<td>
+			  &nbsp; &nbsp; &nbsp;Die Hard<br>
+			  &nbsp; &nbsp; &nbsp;Matrix<br>
+			  &nbsp; &nbsp; &nbsp;Iron Man
+			</td>
+	</tr>
+	<tr bgcolor=#FF8000>
+		<td><b>Romance</b></td>
+	</tr>
+		<tr bgcolor=#FFF0E1>
+		<td>
+			  &nbsp; &nbsp; &nbsp;about time<br>
+			  &nbsp; &nbsp; &nbsp;Star Wars<br>
+			  &nbsp; &nbsp; &nbsp;Kings Man
+			</td>
+	</tr>
+	<tr bgcolor=#408080>
+		<td><b>Thriller</b></td>
+		<tr bgcolor=#E2F1F1>
+		<td>
+			  &nbsp; &nbsp; &nbsp;Die Hard<br>
+			  &nbsp; &nbsp; &nbsp;Die Hard<br>
+			  &nbsp; &nbsp; &nbsp;Die Hard
+			</td>
+	</tr>
+	</table>
+ </body>
+</html>

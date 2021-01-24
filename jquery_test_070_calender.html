@@ -1,0 +1,245 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title> new document </title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<script type="text/javascript" src="jquery-1.11.0.min.js"></script>
+	<!-------------------------------------------------------------------->
+	<script>
+	function print_calender( idV, year, month ){
+		//$("."+idV).empty(  );
+		//var day = "";
+		if( year==undefined && month==undefined ) { 
+			var today = new Date();
+			year = today.getFullYear();
+			month = today.getMonth()+1;
+			//day = today.getDate(); 
+		}
+		else{
+			// 매개변수의 숫자문자 데이터를 진짜 숫자로 변환.
+			year = parseInt( year,10 );
+			month = parseInt( month,10 );
+		}
+		//-------------------------------------
+		// 지난달 마지막 날짜
+		var pastMonth_lastDay = new Date( year, month-1, 0 ).getDate( );
+		// 이번달 마지막 날짜
+		var thisMonth_lastDay = new Date( year, month, 0 ).getDate( );
+		// 이번달 1일의 요일 번호(0~6 사이의 데이터)
+		var thisMonth_firstDay_week_no = new Date( year, month-1, 1 ).getDay( );
+		// 이번달에 나오게되는 지난달 시작 날짜
+		var pastMonth_startDay = pastMonth_lastDay-thisMonth_firstDay_week_no+1;
+		//alert( pastMonth_startDay );alert( pastMonth_lastDay+"/"+thisMonth_lastDay+"/"+thisMonth_firstDay_week_no+"/");
+		//-------------------------------------
+		var thBgColor_weekday = "#E8E8E8";
+		var thBgColor_sunday = "#FFB3C1";
+		var thBgColor_saturday = "#A6D2FF";
+		//---------------------------------------
+		//테이블 태그를 저장할 Array 객체 생성
+		var arr = [];
+		var code1 = " style='cursor:hand;' onclick=\"print_calender('?1',?2, ?3 );\" ";
+			code1 = code1.replace( "?1", idV ).replace( "?2", (month>1?year:year-1) ).replace( "?3", (month>1?month-1:12) );
+		var code2 = " style='cursor:hand;' onclick=\"print_calender('?1',?2, ?3 );\" ";
+			code2 = code2.replace( "?1", idV ).replace( "?2", (month<12?year:year+1) ).replace( "?3", (month<12?month+1:1) );
+
+		/*var code1 = " style='cursor:hand;' onclick=\"print_calender( "+
+					"'"+idV+"',"+(month>1?year:year-1)+", "+(month>1?month-1:12)+" );\" ";
+		var code2 = " style='cursor:hand;' onclick=\"print_calender( "+
+					"'"+idV+"',"+(month<12?year:year+1)+", "+(month<12?month+1:1)+" );\" ";*/
+
+		var tbcss = " style='border-collapse:collapse;' "; 
+		tbcss = "";
+
+		arr.push( "<table "+tbcss+" cellpadding=3 cellsapcing=0 class='calender' border=0 align=center>" );	
+		arr.push( "<caption>" );
+		arr.push( "<span "+code1+">&lt;&lt;</span> "+year+"년 " + (month<10?"0":"") + month+"월 <span "+code2+">&gt;&gt</span>" );	
+		arr.push( "</caption>" );
+		arr.push( "<thead><tr bgcolor="+thBgColor_weekday+"><th>일<th>월<th>화<th>수<th>목<th>금<th>토</thead>" );
+		arr.push( "<tbody>" );
+		//---------------------------------------
+		var th_idx = 0;			// th 태그의 출력 개수가 저장
+		var thisMonthDay = 1;	// 출력되는 이번달 날짜가 저장
+		var nextMonthDay = 1; 	// 출력되는 다음달 날짜가 저장
+		var bgColor = "";
+		for( var i=0; i<=6 ; i++ ){
+			arr.push( "<tr>" );
+			for( var ii=0; ii<=6 ; ii++ ){
+				if( ii%7==0 ){ bgColor=thBgColor_sunday; } else if( ii%6==0 ){ bgColor=thBgColor_saturday; } else{ bgColor=thBgColor_weekday; }
+				arr.push( "<th bgcolor="+bgColor+">" );
+				// 만약에 이번달 1일 이전이라면
+				if( th_idx<thisMonth_firstDay_week_no ) {
+					arr.push( "<font size='2' color='#686868'>"+(pastMonth_startDay++)+"</font>" );
+				}
+				// 만약에 이번달 마지막 날짜 이후이라면
+				else if( thisMonthDay>thisMonth_lastDay ) {
+					arr.push( "<font size='2' color='#686868'>"+(nextMonthDay++)+"</font>" );
+				}
+				// 만약에 이번달 1일 부터 이번달 마지막 날짜 사이라면
+				else if( th_idx>=thisMonth_firstDay_week_no && thisMonthDay<=thisMonth_lastDay ) {
+					arr.push(  thisMonthDay++ );
+				}
+				th_idx++;
+			}
+			if( thisMonthDay>=thisMonth_lastDay ) break;
+		}
+		//---------------------------------------
+		arr.push( "</table>" );
+		$("."+idV).html( arr.join("") );
+
+					//thObj.eq(ii).html( "<font size='2' color='#686868'>"+(before_lastDay--)+"</font>" );
+					//thObj.eq(ii).html( "<font size='2' color='#686868'>"+(++cnt)+"</font>" );
+
+
+
+
+
+		/*var no = 1; var cnt = 0;
+		for( var i=0; i<=6 ; i++ )<!--  -->{
+			arr.push( "<tr>" );
+			for( var ii=0; ii<=6 ; ii++ ){
+				if( cnt++>=thisMonth_firstDay_week_no && no<=thisMonth_lastDay )
+					arr.push( "<th>" +  no++ );
+				else
+					arr.push( "<th>&nbsp;" );
+			}
+			if( no>=thisMonth_lastDay ) break;
+		}*/
+		//---------------------------------------
+		
+		//---------------------------------------
+		/*var obj = $(".calender tbody tr th")
+		for( var i=thisMonth_firstDay_week_no-1 ; i>=0 ; i-- ){
+			obj.eq(i).html( pastMonth_lastDay-- );
+		}
+		for( var i=0 ;  ; i++ ){
+			obj.eq(i).html( pastMonth_lastDay-- );
+		}*/
+
+
+		/*for( var i=0; i<=6 ; i++ ){
+			arr.push( "<tr>" );
+			for( var ii=0; ii<=6 ; ii++ ){
+				arr.push( "<th>&nbsp;" );
+			}
+		}
+		//---------------------------------------
+		arr.push( "</table>" );
+		$("."+idV).html( arr.join("") );
+		//---------------------------------------
+		var no = 1;
+		$(".calender tbody th").each(function(i){
+			if( i>=thisMonth_firstDay_week_no && no<=thisMonth_lastDay ) {
+				$(this).text( no++ );
+			}
+		});
+		//---------------------------------------
+		$(".calender tbody tr").each(function(i){
+			var obj = $(this);
+			if( obj.text( ).split(" ").join("")==false ){
+				obj.remove();
+			}		
+		});*/
+
+
+
+
+		
+	/*
+		var before_date = new Date( year, month-2, day );
+		var before_lastDay = new Date( year, month-1, 0 ).getDate( );
+		var now_date = new Date( year, month-1, day );
+			var str = "";
+			if( (now_date.getMonth()+1)<10 ) { str = "0"; }
+			var week_no = now_date.getDay( );
+			alert( week_no );
+			var now_lastDay = new Date( year, month, 0 ).getDate( );
+		var next_date = new Date( year, month, day );
+		
+		alert( week_no );
+		//-------------------------------------
+		//alert( week_no + " / "+now_lastDay );
+		//-------------------------------------
+		var arr = [];
+		var code1 = " style='cursor:hand;' onclick=\"print_calender( "
+					+(before_date.getFullYear())+", "+(before_date.getMonth()+1)+", "
+					+(before_date.getDate())+", '"+idV+"' );\" ";
+		var code2 = " style='cursor:hand;' onclick=\"print_calender( "
+					+(next_date.getFullYear())+", "+(next_date.getMonth()+1)+", "
+					+(next_date.getDate())+", '"+idV+"' );\" ";
+		arr.push( "<table cellpadding=3 class='calender' border=1>" );
+		
+		arr.push( "<caption><span "+code1+">&lt;&lt</span> "+(now_date.getFullYear())+"년 "
+					+ str + (now_date.getMonth()+1)+"월 <span "+code2+">&gt;&gt</span>" );
+
+
+		arr.push( "<thead><tr><th>일<th>월<th>화<th>수<th>목<th>금<th>토</thead>" );
+		arr.push( "<tbody>" );
+
+		//---------------------------------------
+		for( var i=0; i<=6 ; i++ ){
+			arr.push( "<tr>" );
+			for( var ii=0; ii<=6 ; ii++ ){
+				arr.push( "<th>&nbsp;" );
+			}
+		}
+		//---------------------------------------
+		arr.push( "</table>" );
+		$("."+idV).html( arr.join("") );
+		//---------------------------------------
+		var no1 = 1;
+		$(".calender tbody th").each(function(i){
+			//if( i<week_no || no>now_lastDay ) return;
+			if( i>=week_no && no1<=now_lastDay ) {
+				$(this).text( no1++ );
+			}
+			//if( no1>now_lastDay ) {	$(this).text( no2++ );	}
+		});
+		//---------------------------------------
+		$(".calender tbody tr").each(function(i){
+			var obj = $(this);
+			if( obj.text( ).split(" ").join("")==false ){
+				obj.remove();
+			}		
+		});
+		//---------------------------------------
+		var thObj = $(".calender tbody th");
+		for( var i=0 ; i<thObj.length ; i++ ){
+			if( thObj.eq(i).text( ).split(" ").join("")==true ){
+				for( var ii=i-1 ; ii>=0 ; ii--){
+					thObj.eq(ii).html( "<font size='2' color='#686868'>"+(before_lastDay--)+"</font>" );
+				}
+				break;
+			}
+		}
+		//---------------------------------------
+		var cnt = 0;
+		for( var i=thObj.length-1 ; i>=0 ; i-- ){
+			if( !(thObj.eq(i).text( )==false) ){
+				for( var ii=i+1 ; ii<thObj.length ; ii++ ){
+					thObj.eq(ii).html( "<font size='2' color='#686868'>"+(++cnt)+"</font>" );
+				}
+				break;
+			}
+		}
+		//---------------------------------------
+		$(".calender tbody th:nth-child(1)").css({
+			"background-color":"#FF9D9D"
+			,"color":"red"
+		});
+		$(".calender tbody th:nth-child(7)").css( "background-color", "#9595FF");
+	*/
+		
+	}
+
+	</script>
+<!-------------------------------------------------------------------->
+</head>
+
+
+
+<body><center>
+	<div class="xxx" style="padding:5;width:0;height:0" ></div>
+	<script>
+		print_calender( "xxx" );
+	</script>
+
+</body>
+</html>

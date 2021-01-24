@@ -1,0 +1,60 @@
+<!-- 
+--------------
+jquery_10.html
+--------------
+-->
+<html>
+<meta charset="UTF-8">
+<head>
+   <script src="jquery-1.11.0.min.js"></script>
+   <script>
+      $(document).ready(function(){
+         //---------------------------------------------
+         // class=dogList 를 가진 태그의 후손 중 tr 태그를 골라 순서대로 접근하여
+         // each 메소드 안의 익명함수를 호출한다.
+         // each 메소드 안의 익명함수의 매개변수 i 는 호출될 때마다 0부터 시작하여
+         // 1 씩 증가하며 호출된다.
+         //---------------------------------------------
+         /*
+         $(".dogList tr").each(function(i){
+            
+            // 만약에 i 가 0 이면 = 1 번째 tr 을 잡았으면
+            if(i==0){
+               // 선택된 tr 태그의 첫째 아들로 <th>번호 를 삽입하기
+               $(this).prepend("<th bgcolor=gray>번호");
+            }
+            else{
+               // 선택된 tr 태그의 첫째 아들로 <td>인덱스번호 를 삽입하기
+               $(this).prepend("<td>" + i);
+            }
+            
+         });
+         */
+         // tr 태그의 개수 구하기
+         var trTotCnt = $(".dogList tr").length-1;
+         $(".dogList tr").each(function(i){
+            if(i==0){
+               // 선택된 tr 태그의 첫째 아들로 <th>번호 를 삽입하기
+               $(this).prepend("<th bgcolor=gray>번호");
+            }
+            else{
+               $(this).prepend("<td>" + trTotCnt--);
+            }
+         });
+      });
+   </script>
+</head>
+
+<body><center>
+   <table class="dogList" border=1 cellpadding=4 style="border-collapse:collapse;">
+   <tr><th bgcolor="gray">개이름
+   <tr><td>사모예드
+   <tr><td>도베르만
+   <tr><td>진돗개
+   <tr><td>셰퍼드
+   <tr><td>비글
+   <tr><td>삽살개
+   <tr><td>풍산개
+   </table>
+</body>
+</html>

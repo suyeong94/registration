@@ -1,0 +1,563 @@
+
+<!--
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+jquery_test_013_addTr.html
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+	=>행 추가 버튼을 클릭하면 tr  행을 추가한다.
+	=>tr 에 HTML 입력양식도 카피되어 추가 된다.
+-->
+<html>
+<meta charset="UTF-8">
+<head>
+	<script src="jquery-1.11.0.min.js" type="text/javascript"></script>
+	<script>
+
+		//***********************************************************
+		// 멀티 행 내부의 [i] 문자열을 [0]~[n] 형태의 일련 번호로 대체해주는 함수 선언
+		//***********************************************************
+		function multiRowNumbering( trClassV ){
+			try{
+				var cr_selector = "[type=checkbox],[type=radio]";
+				var not_cr_selector = "select,textarea,[type=text],[type=password],[type=hidden],[type=file]"
+				var all_selector = cr_selector + "," +not_cr_selector;
+				//------------------------------
+				// 모든  tr 태그 내부의 입력 양식의 value 값을 배열에 저장하기
+				// 모든  tr 태그 내부의 [i] 문자열 보정하기.
+				//------------------------------
+				var trObjs = $("."+trClassV);
+				var idx1 = 0; var idx2 = 0; var valVs1 = []; var valVs2 = [];
+				for( var i=0 ; i<trObjs.length ; i++ ){
+						var thisTrObj = trObjs.eq(i);
+						//---
+						thisTrObj.find( cr_selector ).each( function(){
+							valVs1[idx1++] = $(this).prop("checked");
+						});
+						thisTrObj.find( not_cr_selector ).each( function(){
+							valVs2[idx2++] = $(this).val( );
+						});
+				}
+				//------------------------------
+				// 모든  tr 태그 내부의 입력양식의 name 값의 [i] 값에 인덱스 번호 넘버링하기
+				//------------------------------
+				for( var i=0 ; i<trObjs.length ; i++ ){
+						var thisTrObj = trObjs.eq(i);
+						var html = thisTrObj.html();
+						//html = html.replace(/\n/g,"");
+						//---
+						var arr1 = html.split( "[" ); var arr2 = html.split( "]" );
+						if( arr1.length != arr2.length ) {
+							alert( "<에러 발생> [ 또는 ] 가 모자랍니다." ); return;
+						}
+						for( var k=0 ; k<arr1.length ; k++ ){
+							if( arr1[k].indexOf( "]" )>=0 ){
+								var tmp = i  + arr1[k].substring(  arr1[k].indexOf( "]" )  );
+								arr1[k] = tmp;
+							}
+						}
+						thisTrObj.html( arr1.join("[") );
+						/*thisTrObj.html( changeDaegaroNo(html,i) );*/
+				}
+				//------------------------------
+				// 모든  tr 태그 내부의 입력양식에 기존 value 값 또는 체크여부값 넣어주기
+				//------------------------------
+				var trObjs = $("."+trClassV);
+				var idx1 = 0; idx2 = 0;
+				trObjs.each( function(i){
+						var thisTrObj = $(this);
+						//---
+						thisTrObj.find( cr_selector ).each( function(){
+							$(this).prop(     "checked", valVs1[idx1++]     );
+						});
+						thisTrObj.find( not_cr_selector ).each( function(){
+							$(this).val( valVs2[idx2++] );
+						});
+				});
+			}catch(e){
+				alert("multiRowNumbering(~) 함수 호출 시 에러 발생!");
+			}
+		}
+
+
+
+
+
+		//***********************************************************
+		// 멀티 행 중 행 내부의 입력양식에 데이터가 없으면 행을 삭제하는 함수 선언
+		//***********************************************************
+		function delEmptyRow( trClassV ){
+			try{
+				var cr_selector = "[type=checkbox],[type=radio]";
+				var not_cr_selector = "select,textarea,[type=text],[type=password],[type=hidden],[type=file]"
+				var all_selector = cr_selector + "," +not_cr_selector;
+				//------------------------------
+				var trObjs = $("."+trClassV);
+				var all_trCnt = trObjs.length;
+				if( all_trCnt==0){
+					alert( "<에러 발생>delEmptyRow('"+trClassV+"') 함수 호출 시 class="+trClassV+" 을 가진 tr 태그 가 없읍니다." ); return;
+				}
+				if( all_trCnt==1 ){ return;  }
+
+				for( var i=0 ; i<trObjs.length ; i++ ){
+						var thisTrObj = trObjs.eq(i);
+						//------------------------------
+						// tr 태그 내부의 입력 양식에 데이터가 없으면 삭제하기
+						//------------------------------
+						var dataCnt = 0;
+						thisTrObj.find( all_selector ).each( function(){
+								var thisObj = $(this);
+								var nameV = thisObj.attr("name");
+								if( thisObj.is(":radio") || thisObj.is(":checkbox") ){
+									if( thisObj.filter(":checked").length>0){ dataCnt++;  }
+								}
+								else{
+									var val = thisObj.val( );
+									if( val.split(" ").join("")!="" ){ dataCnt++; }
+								}
+						})
+						if( dataCnt==0 ) {  thisTrObj.remove();  }
+				}
+			}catch(e){
+				alert("delEmptyRow('"+trClassV+"') 함수 호출 시 에러 발생!");
+			}
+			multiRowNumbering( trClassV );
+		}
+
+		/*
+		//***********************************************************
+		// 행 안의 입력 양식의 name 출력하는 함수 선언
+		//***********************************************************
+		function print_info_multiTr( classV ){
+			try{
+				$(".zxcvbn").remove();
+				//---
+				$("body").append("<center><div class=zxcvbn></div></center>");
+				var divObj = $(".zxcvbn");
+				divObj.html(" ");
+				//---
+				var all_selector = "[type=checkbox],[type=radio],select,textarea,[type=text],[type=password],[type=hidden],[type=file]";
+				var trObj = $("."+classV);
+				var htmls = [];
+				trObj.each( function(i){
+						var thisObj = $(this).find(all_selector);
+						thisObj.each( function(){
+							var thisObj = $(this);
+							var nameV = thisObj.attr("name");
+							var valV = "";
+							if( thisObj.is(":checkbox") || thisObj.is(":radio") ) {  valV = thisObj.prop("checked");  }
+							else                                                  {  valV = thisObj.val(); }
+							if( !valV ){ valV="없음"; }
+							htmls.push(  nameV  + " : " + valV+ "___" );
+						})
+						htmls.push("<br>");
+				});
+				divObj.append( htmls.join("")  );
+			}catch(e){
+				alert("print_info_multiTr(~) 함수 호출 시 에러 발생!");
+			}
+		}
+
+
+		function print_info_multiTr( classV ){
+			try{
+				var bgC = "lightblue";
+				var bgC2 = "yellow";
+				$(".zxcvbn").remove();
+				//---
+				$("body").append("<center><div class=zxcvbn></div></center>");
+				var divObj = $(".zxcvbn");
+				divObj.html(" ");
+				//---
+				var all_selector = "[type=checkbox],[type=radio],select,textarea,[type=text],[type=password],[type=hidden],[type=file]";
+				var trObj = $("."+classV);
+				var htmls = [];
+				htmls.push( "<table border=1 style='font-size:13;font-weight:bold'>")
+				//---
+				trObj.each( function(i){
+					if( i%2==1 ) {bgC ="";} else{ bgC = "lightblue"; }
+					htmls.push( "<tr bgcolor="+bgC+"><td bgcolor="+bgC2+">"+(i+1)+"행")
+					var thisObj = $(this).find(all_selector);
+					//---
+					var dataCnt = 0;
+					thisObj.each( function(){
+						var thisObj = $(this);
+						//---
+						var typeV = "text";
+						var nameV = "name : "+thisObj.attr("name");
+						var valV = "";
+						//---
+						if( thisObj.is(":checkbox") )  { typeV = "checkbox"; }
+						else if( thisObj.is("radio") )      { typeV = "radio"; }
+						else if( thisObj.is("select") )     { typeV = "select"; }
+						else if( thisObj.is("password") )   { typeV = "password"; }
+						else if( thisObj.is("hidden") )     { typeV = "hidden"; }
+						//---
+						if( thisObj.is(":checkbox") || thisObj.is(":radio") ){
+							valV = thisObj.prop("checked"); if( valV==true ) { dataCnt++; }
+							valV = "checked : "+valV;
+						}else{
+							valV = thisObj.val(); if( valV!=null && valV!=undefined && valV.split(" ").join("")!="" ) { dataCnt++; }
+							valV = "value : "+valV;
+						}
+						htmls.push( "<td>-"+typeV+"<br>-"+ nameV+"<br>-"+ valV );
+					})
+					//---
+					htmls.push( "<td  bgcolor="+bgC2+">데이터 존재 개수 : "+ dataCnt +"&nbsp;")
+				});
+				//---
+				htmls.push( "</table>")
+				divObj.append( htmls.join("")  );
+			}catch(e){
+				alert("print_info_multiTr(~) 함수 호출 시 에러 발생!");
+			}
+		}
+		*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		//***********************************************************
+		// 원하는 곳에 [행 추가/삭제]하는 함수 선언
+		//***********************************************************
+		function add_del_tr( trClassV, optionNo ){
+			try{
+				var cr_selector = "[type=checkbox],[type=radio]";
+				var not_cr_selector = "select,textarea,[type=text],[type=password],[type=hidden],[type=file]"
+				var all_selector = cr_selector + "," +not_cr_selector;
+				//------------------------------
+				// 행삽입 또는 행삭제 버튼의 이벤트가 발생한 행의 tr 태그를 관리하는 JQuery 객체 얻기
+				//------------------------------
+				var trObj = $(event.srcElement);  //var trObj = $(event.target);
+				//------------------------------
+				// 매개변수로 들어온 class 값의 유효성 체크하기
+				//------------------------------
+				var flag = false;
+				for( var i=0; i<100 ; i++ ){
+					trObj = trObj.parent();
+					if( trObj.attr( "class" )==trClassV ){ flag = true; break; }
+				}
+				if( flag==false ) {
+					alert("<에러발생>add_del_tr( '"+trClassV+"', "+optionNo+" ) 함수 호출 시 1번째 인자 값에서 class="+trClassV+" 가진 tr 태그가 없습니다."); return;
+				}
+				if( optionNo!=0 && optionNo!=1 ) {
+					alert("<수정요망>add_del_tr( '"+trClassV+"', "+optionNo+" ) 함수 호출 시 2번째 인자 값은 0 또는 1 입니다."); return;
+				}
+				//------------------------------
+				// 복사할  tr 태그 내부의 입력 양식의 value 값 또는 체크여부값을 배열에 저장하기
+				//------------------------------
+				var idx1 = 0; var idx2 = 0; var valVs1 = []; var valVs2 = [];
+				trObj.find( cr_selector ).each( function(){
+					valVs1[idx1++] = $(this).prop("checked");
+				});
+				trObj.find( not_cr_selector ).each( function(){
+					valVs2[idx2++] = $(this).val( );
+				});
+				//------------------------------
+				// 먼약 tr 삭제 모드면
+				//------------------------------
+				if( optionNo==0 ){
+						if( $("."+trClassV).length==1 ) {
+							alert("행 개수가 1개 일 경우 삭제할수 없습니다"); return;
+						}
+						if( confirm("정말 삭제하시겠습니까?")==true ) { trObj.remove(); }
+				}
+				//------------------------------
+				// 먼약 tr 삽입 모드면
+				//------------------------------
+				else if( optionNo==1 ){
+						//------------------------------
+						// 복사할 tr 태그 내부의 입력 양식에 데이터가 없으면 경고하고 함수 중단하기
+						//------------------------------
+						var dataCnt = 0;
+						trObj.find( all_selector ).each( function(){
+								var thisObj = $(this);
+								var nameV = thisObj.attr("name");
+								if( thisObj.is(":radio") || thisObj.is(":checkbox") ){
+									if( thisObj.filter(":checked").length>0){ dataCnt++;  }
+								}
+								else{
+									var val = thisObj.val( );
+									if( val.split(" ").join("")!="" ){ dataCnt++; }
+								}
+						})
+						if( dataCnt==0 ) {
+							alert("현재 행 내부의 입력양식에 값이 없어 행추가 불가능"); return;
+						}
+						//------------------------------
+						// tr 태그를 복사하여 tr 태그 다음에 삽입하기
+						// 삽입된 tr 태그 내부의 입력 양식 데이터 비우기
+						//------------------------------
+						trObj.after( trObj.clone() );
+						var new_trObj = trObj.next();
+						new_trObj.find( ":checked" ).prop( "checked",false );
+						new_trObj.find( not_cr_selector ).val( "" );
+						//------------------------------
+						// 복사한 기존 tr 태그 내부의 입력양식에 데이터 넣어주기
+						//------------------------------
+						var idx1 = 0; var idx2 = 0;
+						trObj.find( cr_selector ).each( function(){
+							$(this).prop( "checked",valVs1[idx1++] );
+						});
+						trObj.find( not_cr_selector ).each( function(){
+							$(this).val( valVs2[idx2++] );
+						});
+				}
+				//------------------------------
+				// 모든 tr 태그 내부의 입력 양식의 name 값의 [i] 값에 인덱스 번호 넘버링 하기
+				//------------------------------
+				multiRowNumbering( trClassV );
+			}catch(e){
+				alert("add_del_tr(~) 함수 호출 시 에러 발생!");
+			}
+			//print_info_multiTr( trClassV )
+		}
+
+
+
+
+
+
+
+
+		//***********************************************************
+		// 마지막에 [행 추가/삭제]하는 함수 선언
+		//***********************************************************
+		function add_del_tr_last( classV, optionNo ){
+			try{
+				//---------------
+				// checkbox 와 radio 입력 양식을 가르키는 [선택자 문자열] 저장.
+				// checkbox 와 radio 입력 양식을 제외한 입력 양식 태그를 가르키는 [선택자 문자열] 저장.
+				// 모든 입력 양식 태그를 가르키는 [선택자 문자열] 저장.
+				//---------------
+				var cr_selector = "[type=checkbox],[type=radio]";
+				var not_cr_selector = "select,textarea,[type=text],[type=password],[type=hidden],[type=file]"
+				var all_selector = cr_selector + "," +not_cr_selector;
+				//---------------
+				var trObj = $("."+classV);
+				var all_trCnt = trObj.length;
+				var first_trObj = trObj.first();
+				var last_trObj = trObj.last();
+				//---------------
+				var idx1 = 0;  var idx2 = 0; var valVs1 = []; var valVs2 = [];
+				last_trObj.find( cr_selector ).each( function(){
+					valVs1[idx1++] = $(this).prop("checked");
+				});
+				last_trObj.find( not_cr_selector ).each( function(){
+					valVs2[idx2++] = $(this).val( );
+				});
+				//---------------
+				if( optionNo!=0 && optionNo!=1 ) {
+					alert("<수정요망>add_del_tr( '"+trClassV+"', "+optionNo+" ) 함수 호출 시 2번째 인자 값은 0 또는 1 입니다."); return;
+				}
+				if( all_trCnt==0 ) {
+					alert("<에러발생>add_del_tr( '"+trClassV+"', "+optionNo+" ) 함수 호출 시 1번째 인자 값에서 class="+trClassV+" 가진 tr 태그가 없습니다."); return;
+				}
+				else if( all_trCnt==1 ) {
+					var html = first_trObj.html();
+					var cnt1 = html.split("[").length;
+					var cnt2 = html.split("]").length;
+					if( cnt1!=cnt2 ) {
+						alert( "<에러 발생>class="+classV+" 을 가진 태그 내부에 [ 또는 ] 가 모자랍니다." ); return;
+					}
+				}
+				//---------------
+				// 만약 삭제 모드면
+				//---------------
+				if( optionNo==0 ){
+					//---------------
+					// 매개변수로 들어온 선택자가 가르키는 태그가 1개면 함수 중단.
+					//---------------
+					if( all_trCnt==1 ) { return; }
+					//---------------
+					// 매개변수로 들어온 선택자가 가르키는 태그 중 마지막 놈을 삭제하기.
+					//---------------
+					if( confirm("정말 삭제하시겠습니까?")==true ) { last_trObj.remove(); }
+				}
+				//---------------
+				// 만약 삽입 모드면
+				//---------------
+				else if( optionNo==1 ){
+					//---------------
+					// 매개변수로 들어온 선택자가 가르키는 태그 내부의 입력 양식에 입력된 데이터 개수 누적하기
+					//---------------
+					var dataCnt = 0; var flag = true;
+					last_trObj.find( all_selector ).each( function(){
+							if( flag == false) { return; }
+							var thisObj = $(this);
+							var nameV = thisObj.attr("name");
+							if( all_trCnt==1 && nameV.indexOf("[0]")<0 ) {
+								alert( "<에러 발생>1행의  name=" + nameV+"  라는 입력양식의 이름에는 [0]가 있어야 합니다.");
+								flag = false;
+							}
+							else{
+								if( thisObj.is(":radio") || thisObj.is(":checkbox") ){
+									if( thisObj.filter(":checked").length>0){ dataCnt++;  }
+								}
+								else{
+									var val = thisObj.val( );
+									if( val.split(" ").join("")!="" ){ dataCnt++; }
+								}
+							}
+					})
+					if( flag == false) { return; }
+					//---------------
+					// 매개변수로 들어온 선택자가 가르키는 태그 내부의 입력 양식에 입력된 데이터 개수가 0개면 함수중단하기
+					//---------------
+					if(dataCnt==0 ) { alert("마지막 행에 테이터가 비어있어 행 추가 불가능!"); return; }
+					//---------------
+					last_trObj.after(     last_trObj.clone()    );
+					new_trObj = last_trObj.next( );
+					//---------------
+					var html = new_trObj.html();
+					var arr = html.split("[");
+					for( var i=0 ; i<arr.length ; i++ ){
+						if( arr[i].indexOf("]")>=0 ){
+							arr[i] = all_trCnt + arr[i].substring( arr[i].indexOf("]") );
+						}
+					}
+					new_trObj.html( arr.join("[") );
+					//---------------
+					new_trObj.find(cr_selector).prop("checked",false);
+					new_trObj.find(not_cr_selector).val("");
+					//---------------
+					var idx1 = 0;  var idx2 = 0;
+					last_trObj.find( cr_selector ).each( function(){
+						$(this).prop("checked",valVs1[idx1++] );
+					});
+					last_trObj.find( not_cr_selector ).each( function(){
+						 $(this).val( valVs2[idx2++] );
+					});
+				}
+			}catch(e){
+				alert("add_del_tr_last(~) 함수 호출 시 에러 발생!");
+			}
+		}
+
+	</script>
+</head>
+<!--==============================================================================-->
+<body><center><br><br><hr>
+
+	<form name="myForm1">
+		<table border=1 cellpadding=5  id="employee">
+				<caption align=left><b> 1. 직원 </b></caption>
+				<tr>
+					<th bgcolor=#C1C1C1>직원명
+					<th bgcolor=#C1C1C1>출생년도
+					<th bgcolor=#C1C1C1>성별
+					<th bgcolor=#C1C1C1>직급
+					<th bgcolor=#C1C1C1>스킬
+				<tr class=employee>
+					<td>
+						<input type="text" name="emp[0].emp_name">
+					<td>
+						<select name="emp[0].age">
+							<option value="">
+							<script>
+								var arr = [];
+								for( var i=1950 ; i<new Date().getFullYear() ; i++ ){
+									arr.push("<option value="+i+">"+i);
+								}
+								$("[name='emp[0].age']").append( arr.join("") );
+							</script>
+						</select>년
+					<td>
+						<input type="radio" name="emp[0].sex" value="남">남
+						<input type="radio" name="emp[0].sex" value="여">여
+					<td>
+						<select name="emp[0].jikup">
+							<option value="">
+							<option value="사원">사원
+							<option value="주임">주임
+							<option value="대리">대리
+						</select>
+					<td>
+						<input type="checkbox" name="emp[0].skill" value="JSP">JSP
+						<input type="checkbox" name="emp[0].skill" value="ASP">ASP
+						<input type="checkbox" name="emp[0].skill" value="PHP" checked>PHP
+		</table><br>
+
+		<input type="button" value="행추가"  onclick="add_del_tr_last( 'employee',1 );">
+		<input type="button" value="행삭제"  onclick="add_del_tr_last( 'employee',0 );">
+		<input type="button" value="데이터없는 행 제거" onclick="delEmptyRow(  'employee' );">
+
+	</form><hr>
+	<!-- <form name="myForm2">
+		<table border=1 cellpadding=5  id="family" cellpadding=5>
+				<caption align=left><b> 2. 가족 </b></caption>
+				<tr>
+					<th bgcolor=#C1C1C1>가족관계
+					<th bgcolor=#C1C1C1>이름
+					<th bgcolor=#C1C1C1>성별
+					<th bgcolor=#C1C1C1>동거여부
+					<th bgcolor=#C1C1C1>생일
+					<th bgcolor=#C1C1C1>
+				<tr class=family>
+					<td>
+						<select name="family[0].relation">
+							<option value="">
+							<option value="부">부
+							<option value="모">모
+							<option value="형제">형제
+							<option value="배우자">배우자
+						</select>
+					<td>
+						<input type="text" name="family[0].f_name">
+					<td>
+						<input type="radio" name="family[0].sex" value="남" checked>남
+						<input type="radio" name="family[0].sex" value="여">여
+					<td>
+						<input type="checkbox" name="family[0].with_live" value="동거" checked>동거
+					<td>
+						<select name="family[0].birth_year">
+							<option value="">
+							<option value="2001">2001
+							<option value="2002">2002
+						</select>
+						<select name="family[0].birth_month">
+							<option value="">
+							<option value="1">1
+							<option value="2">2
+						</select>
+						<select name="family[0].birth_date">
+							<option value="">
+							<option value="1">1
+							<option value="2">2
+						</select>
+					<td>
+						<input type="button" value="행추가"  onclick="add_del_tr( 'family', 1 ); print_info_multiTr( 'family' );">
+						<input type="button" value="행삭제"  onclick="add_del_tr( 'family',0 ); print_info_multiTr( 'family' );">
+		</table><br>
+		<input type="button" value="데이터없는 행 제거" onclick="delEmptyRow(  'family' ); print_info_multiTr( 'family' );">
+
+	</form><hr> -->
+
+</body>
+<!--==============================================================================-->
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
