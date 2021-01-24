@@ -1,0 +1,543 @@
+<!--
+-------------------------------------
+jquery_01.html
+--------------------------------------
+------------------------------
+JQuery 란?
+-----------------------------
+●공개적으로 개발되고 무료로 제공되는 [사용자 정의 객체] 이름이다.
+	▶<참고> 누구나 버그 수정,성능 향상 그리고 도움말 작성에 참여할 수 있다.
+	▶<참고> http://plugins.jquery.com/ 에 광범위한 라이브러리(~.js)가 있으며,
+			꾸준히 업데이트되고 있고 누구나 버그 수정,성능향상,
+			도움말 작성에 참여할 수 있다.
+------------------------------
+JQuery 객체 기능
+-----------------------------
+		●HTML 문서 내의 태그 및 출력 문자열을 삽입, 수정, 삭제를 할 수 있다. 그 결과로 웹브라우저 UI에도 변화가 생긴다.
+		●DOM 객체가 소유한 정보를 얻거나 수정할 수 있다. 그 결과로 웹브라우저 UI에도 변화가 생긴다.
+		●웹브라우저에서 각종 [이벤트] 발생 시 실행할 코딩을 설정할 수 있다.
+		●웹 서버와 비동기 방식으로 통신할 수 있다.(비동기:페이지전환없이 웹서버와 통신가능)
+		●CSS 설정할 수 있다.
+		●애니메이션 설장할 수 있다.
+		●기타 등등
+------------------------------
+JQuery 객체의 장점
+-----------------------------
+		●대부분의 브라우저에서 동일한 결과를 생산한다. 즉 브라우저에 따라
+			개발자가 다른 코딩을 할 필요가 없다. (=cross browsing=크로스 브라우징)
+		●html 코드와 javascript 코드를 분리할 수 있어 유지보수가 편하다.
+		●디자이너,퍼블리셔,개발자 모두가 사용하기 편하고 강력한 기능을
+			가진 메소드를 제공한다.
+ ------------------------------
+JQuery 객체 수입 방법
+-----------------------------
+		●jquery-x.x.x.min.js 다운받고 HTML의 head 태그에 아래와 같이 수입하는 코드를
+			작성한다. x 는 임의의 버전 번호이다.
+	------------------------------
+	<script src="jquery-1.11.0.min.js"></script>
+	------------------------------
+	<주의>	src="jquery-1.11.0.min.js" 경로는 호출하는 html과 
+				수입되는 jquery-1.11.0.min.js 가 같은 폴더에 있을 때 쓰는 경로이다.
+ mmmmmmmmmmmmmmmmmmmmmm
+JQuery 객체 메위주를 얻는 방법*****
+mmmmmmmmmmmmmmmmmmmmmm
+	●JQuery 객체의 메위주를 얻어내면 JQuery 객체의 메소드나 속성변수를 호출할 수 있다.
+---------------------------------------------
+	<방법1>	jQuery( 선택자 )   = > jQuery 라는 함수를 호출하여 선택자(=태그를 지칭하는 다양한 방법)가 
+												가르키는 태그를 관리하는 JQuery 객체를 생성하고
+												JQuery 객체의 메위주를 리턴하기
+												선택자(selector) 란 [HTML 문서] 내의 [태그를 가리키는 방법]을 말한다.
+												선택자란 태그를 지칭하는 방법.
+												EX) 다른 별명으로 불러도 그 사람이름으로 인식되는것처럼.
+---------------------------------------------
+	<방법2>	$ ( 선택자 )   = > $ 라는 함수를 호출하여 선택자(=태그를 지칭하는 다양한 방법)가 
+												가르키는 태그를 관리하는 JQuery 객체를 생성하고
+												JQuery 객체의 메위주를 리턴하기
+												선택자(selector) 란 [HTML 문서] 내의 [태그를 가리키는 방법]을 말한다.
+												EX) 다른 별명으로 불러도 그 사람이름으로 인식되는것처럼.
+												 선택자 ) 를 가리키는 방법이 여러개가 있다. 지칭하는 방법이 많다.									
+---------------------------------------------
+	<방법3>	  jQuery			= > jQuery 라는 변수에 JQuery 객체의 메위주가 이미 저장되어있다.
+---------------------------------------------
+	<방법4>  $					= > $ 라는 변수에 JQuery 객체의 메위주가 이미 저장되어있다.
+------------------------------------------------
+	<예> $(  "div"  ).empty(  );   // 화면(바디태그)에 div 태그 내부에 있는 모든 문자열 태그를 없앤다.(div태그는 안사라짐)
+	제이쿼리 메위주가 들어가고 div태그를 관리하는 메위주가 들어간다.
+	<예> $(  "div"  ).remove(  );   // div 태그 내부에 있는 모든 문자열 태그를 없앤다.(div태그도 없앰)											
+	<예> $(  "div span"  ).empty(  );   // div태그 후손중에 span태그를 관리하는 제이쿼리를 생성해서 삭제해라.
+	<예> $(  "body"  ).append("<div>인선</div>");   // body태그 안 맨 마지막에 <div>인선</div> 태그를 삽입해라.
+	<예> $(  "body"  ).prepend("<div>보민</div>");   // body태그 안에입 첫줄에 <div>보민</div> 태그를 삽입해라.
+	<예> $( ".xxx"  ).prepend("<div>보민</div>");   // 클라스=xxx를 가진 태그 내부에 첫번째로 <div>보민</div> 태그 삽입해라
+	<예> $( ".xxx,  .vvv"  ).empty();   // 클라스=xxx와 클라스=vvv를 가진 내부를 제거해라.
+				(콤마로 연결)
+	<예> var str = $( ".xxx"  ).html(); // 클라스 xxx안에 있는 html문자열을 str 
+
+ mmmmmmmmmmmmmmmmmmmmmm
+JQuery 객체 메소드를 호출하는 방법
+mmmmmmmmmmmmmmmmmmmmmm
+---------------------------------------------
+	<방법1>	jQuery( 선택자 ).메소드(~)
+---------------------------------------------
+	<방법2>	$( 선택자 ).메소드(~)
+---------------------------------------------
+	<방법3>	jQuery.메소드(~)
+---------------------------------------------
+	<방법4>	$.메소드(~)
+
+
+--->
+<html>
+ <head>
+	<meta charset="Utf-8">
+	<script src="jquery-1.11.0.min.js"></script>
+	<script src="../JavaScript/common_js.js"></script>
+	<script src="common_jquery_func.js"></script>
+	<script>
+
+
+	//****************************
+	// $(document).ready(   function()  { 자스코딩}  );
+	//***************************
+	// html document 객체를 집어넣구 가로안에 익명함수 넣어주고 
+	//body 태그 안의 요소들은 읽어들인 후  익명함수 내부의 자스코딩을 실행.
+			$(document).ready(  function(){
+		//-------------------------------------------
+		// class=save_member 를 가진 태그를 [클릭]하면
+		// checkForm 이란 함수호출 하도록 설정하기
+		//-------------------------------------------
+				$(".save_member").click(  function(){
+						checkForm();
+				} ) ;
+				/*
+				// 년,월,일이 변화가 있을때(날짜를 선택하는 등) 일어나는 변화
+				$(".birth_year,.birth_month").change(  function(){ 
+						insertValidDate(
+							$(".birth_year")			// 년도 관련 select 태그를 관리하는 JQuery 객체
+							,$(".birth_month")		// 월 관련 select 태그를 관리하는 Query 객체
+							,$(".birth_date")         // 일 관련 select 태그를 관리하는 Query 객체
+					);
+				} ) ;	*/
+//-----------------------------------------------------------------------------------------------		
+// class=birth_year, class=birth_month, class=birth_date 를 가진 3개의 태그에 
+// chang 이벤트가 발생하면 실행할 자스 코딩 설정하기
+//-----------------------------------------------------------------------------------------------	
+				$("birth_year,.birth_month,.birth_date").change(  function(){
+						//선택한 년,월,일을 얻어서 변수에 저장하기 
+						var birth_year = $(".birth_year").val();
+						var birth_month = $(".birth_month").val();
+						var birth_date = $(".birth_date").val();
+						// && 연산자는 둘 중 하나라도(true, false) 이렇게 나올 경우 false로 반환.
+						//-------------------------------------------------------------
+						// 년도가 비었는데 월이 있을경우 경고하고 년도 비우기
+						//-------------------------------------------------------------
+						if( isEmpty(birth_year) && isEmpty(birth_month)==false){
+						//if( isEmpty(birth_year) && !isEmpty(birth_month)   ){// 논리연산자로 위의 결과값과 같다.
+							alert("년도를 먼저 선택한 후 월을 입력해주세요");
+							// class=birth_month 를 가진 태그의 vaule값을 "" 로 하기
+							// class=birth_month 를 가진 태그가 select 태그 이므로 결국 "" 가진 option 태그가 선택되게 된다.
+							$(".birth_month").val(""); //  값을 세팅해줘라는 뜻. vaule값에 값이 없는것을 선택해주라 라는 뜻.
+						}
+						//-------------------------------------------------------------
+						// 월이 비었는데 일이 있을경우 경고하고 년도 비우기
+						//-------------------------------------------------------------
+						else if( isEmpty(birth_month) && isEmpty(birth_date)==false){
+							//if( isEmpty(birth_month) && !isEmpty(birth_date)   ){
+							alert(" 월을 먼저 선택한 후 일을 입력해주세요");
+							$(".birth_date").val("");
+						}
+						//-------------------------------------------------------------
+						// 년,월,일 모두가 비어있지 않으면 = 즉 년,월,일 모두 다 데이터가 있으면
+						//-------------------------------------------------------------
+						/*	if( isEmpty(birth_year)==false && isEmpty(birth_month)==false && isEmpty(birth_date)==false)  } {*/
+					//if( !isEmpty(birth_year) &&!isEmpty(birth_month)&&!isEmpty(birth_date)) {
+						//-------------------------------------------------------------
+						// 년,월에 맞는 일을 class=birth_date를 가진 태그 내부에 option 태그와 어울려서 삽입해주기
+						//-------------------------------------------------------------
+									insertValidDate(
+										$(".birth_year")				// 년도 관련 select 태그를 관리하는 JQuery 객체
+										,$(".birth_month")		// 월 관련 select 태그를 관리하는 Query 객체
+										,$(".birth_date")         // 일 관련 select 태그를 관리하는 Query 객체
+									);
+							
+				})
+		//-------------------------------------------
+		// 	insertYMD_to_select3 함수 호출로 아래 실행구문을 실행한다.
+		//		class=birth_year  를 가진 태그 내부에 년도 관련 option 태그 삽입하기
+		//    class=birth_year  를 가진 태그 내부에 년도 관련 option 태그 삽입하기
+		//   class=birth_year  를 가진 태그 내부에 년도 관련 option 태그 삽입하기
+		//-------------------------------------------
+
+				insertYMD_to_select3(
+				 $(".birth_year")				
+				 // 년도 관련 select 태그를 관리하는 JQuery 객체
+					,$(".birth_month")						// 월 관련 select 태그를 관리하는 Query 객체
+					,$(".birth_date")						 // 일 관련 select 태그를 관리하는 Query 객체
+					,2000										//  최소년도 
+					,new Date().getFullYear()  //  최대년도
+					,2
+			);
+				/*
+		//-------------------------------------------
+		// class=birth_year 를 가진 태그를 관리하는 JQuery 객체 메위주를 얻어 변수 obj에 저장하기
+		//-------------------------------------------				
+				var obj = $(".birth_year");
+		//-------------------------------------------
+		// 반복문을 사용하여  class=birth_year 를 가진 태그 내부에 
+		// 년도 표기 관련 option태그를 막내 아들로 삽입하기
+		//-------------------------------------------	
+				for(var i=2000; i<=new Date().getFullYear()  ; i++){
+						obj.append("<option value="+i+">"+i+"</option>");
+						//obj.prepend("<option value="+i+">"+i+"</option>"); // 높은년도가 먼저 나옴
+				}
+		//-------------------------------------------
+		// class=birth_month 를 가진 태그를 관리하는 JQuery 객체 메위주를 얻어 변수 obj에 저장하기
+		//-------------------------------------------
+				var obj = $(".birth_month");
+		//-------------------------------------------
+		// 반복문을 사용하여  class=birth_month 를 가진 태그 내부에 
+		// 월 표기 관련 option태그를 막내 아들로 삽입하기
+		//-------------------------------------------	
+				for(var i=1; i<=12  ; i++){
+					if( i<10)
+						obj.append("<option value=0"+i+">0"+i+"</option>");
+					else
+						obj.append("<option value="+i+">"+i+"</option>");
+				}
+		//-------------------------------------------
+		// class=birth_date 를 가진 태그를 관리하는 JQuery 객체 메위주를 얻어 변수 obj에 저장하기
+		//-------------------------------------------
+				var obj = $(".birth_date");
+				for(var i=1; i<=31  ; i++){
+					if( i<10)
+						obj.append("<option value=0"+i+">0"+i+"</option>");
+					else
+						obj.append("<option value="+i+">"+i+"</option>");
+				}
+	*/
+	} ) ;
+
+	//-----------------------------------------------------------------
+	// 저장 버튼을 클릭하면 호출되는 checkForm 함수 선언하기.
+	// 이 함수 안에서는 입력 양식의 유효성 체크를 할 것이다.
+	//-------------------------------------------------------------------
+	function checkForm(  ) {
+		
+		//if( false ) {  }
+				//+++++++++++++++++++++
+				// 아이디값 유효성 체크하기
+				//+++++++++++++++++++++
+				//------------------------------------------------
+				// 사용자가 웹브라우저 화면에서 입력한 [아이디값]을 가져와  uid 변수에 저장
+				//-------------------------------------------------
+				//var uid = $(".uid").val();
+				var uid = $("[name='uid']").val();			//    'uid' <작은따옴표 주의>
+				//------------------------------------------------
+				// checkID 함수호출로 아이디의 유효성 여부가 false 면 아이디값 비우고 커서를 넣어주고 함수 중단하기
+				//-------------------------------------------------
+				if(   checkID( uid )==false   ) {
+					 $(".uid").val("");
+					  $(".uid").focus();
+					return;
+				}
+				//+++++++++++++++++++++
+				// 암호 유효성 체크하기
+				//+++++++++++++++++++++
+				//------------------------------------------------
+				// 사용자가 웹브라우저 화면에서 입력한 [암호값]을 가져와  pwd 변수에 저장
+				//-------------------------------------------------
+				//var uid = $(".uid").val();
+				var pwd = $("[name='pwd']").val();			
+				//------------------------------------------------
+				// checkPwd 함수호출로 암호의 유효성 여부가 false 면 암호값 비우고 커서를 넣어주고 함수 중단하기
+				//-------------------------------------------------
+				if(   checkPwd( pwd )==false   ) {
+					 $(".pwd").val("");
+					  $(".pwd").focus();
+					return;
+				}	
+				//+++++++++++++++++++++
+				// 암호 확인 유효성 체크하기
+				//+++++++++++++++++++++
+				//------------------------------------------------
+				// 사용자가 웹브라우저 화면에서 입력한 [암호값]을 가져와  pwd 변수에 저장
+				//-------------------------------------------------
+				//var uid = $(".uid").val();
+				var pwd_confirm = $("[name='pwd_confirm']").val();			
+				//------------------------------------------------
+				// checkPwd 함수호출로 암호의 유효성 여부가 false 면 암호값 비우고 커서를 넣어주고 함수 중단하기
+				//-------------------------------------------------
+				if(   pwd!=pwd_confirm   ) { 
+					 $(".pwd_confirm").val("");
+					  $(".pwd_confirm").focus();
+					return;
+				}
+
+		
+				//+++++++++++++++++++++
+				// skill 유효성 체크하기
+				//+++++++++++++++++++++
+
+				// class="skill" 를 가진 태그 중의 체크된 놈의 개수 구하기
+				// $(".skill:checked==undefined ")이여도 JQury 객체가 생성된다. length 는 JQury속성변수
+				var skill_cnt = $(".skill:checked").length; // JQury 객체가 가지고 있는 속성변수 개수를 알려주는 length 
+					//--------------------------------------------
+					// 위 코딩은 아래 코딩과 동일하다
+					//--------------------------------------------
+					// var skill_cnt = $(".skill:checked").size();
+					// var skill_cnt = $(".skill").filter(":checked").length;
+					// var skill_cnt = $(".skill").filter(":checked").size();
+					// var skill_cnt = $("[name=skill]:checked").length;
+					// var skill_cnt = $("[name=skill]:checked").size();
+				//alert( skill_cnt ) // 잘 되고 있는지 확인, 또는 개수 체크 
+
+				// 만약 체크된 놈이 0개면 경고하고 함수 중단하기.
+				if(skill_cnt==0)  {
+						alert("스킬은 1개 이상 선택 요망!");return;
+				}
+				/*
+				//-------------------------------
+				// 자바 스크립트 DoM 객체를 사용한 Checkbox 유효성 체크 방법
+				//-----------------------------------
+				var skill_cnt = 0;
+				for(var i=0 ; i<document.memberRegForm.skill.length; i++) {
+					if( document.memberRegForm.skill[i].checked==true) {
+							skill_cnt++;
+							break;
+						}
+				}
+				if( skill_cnt==0 ) {
+					alert( "스킬은 1개 이상 입력 요망"); return;
+				}
+
+
+*/
+				//+++++++++++++++++++++
+				// school 유효성 체크하기
+				//+++++++++++++++++++++
+
+				var school_cnt = $(".school:checked").size(); // :checked 왼쪽놈중에 check되어있는것
+					//--------------------------------------------
+					// 위 코딩은 아래 코딩과 동일하다
+					//--------------------------------------------
+					// var school_cnt = $(".school:checked").size();
+					// var school_cnt = $(".school").filter(":checked").length;
+					// var school_cnt = $(".school").filter(":checked").size();
+					// var school_cnt = $("[name=school]:checked").length;
+					// var school_cnt = $("[name=school]:checked").size();
+
+				// 만약 체크된 놈이 0개면 경고하고 함수 중단하기.
+				if(school_cnt==0)  {
+						alert("학력은 1개 이상 선택 요망!");return;
+				}
+				/*
+				//-------------------------------
+				// 자바 스크립트 DoM 객체를 사용한 Checkbox 유효성 체크 방법
+				//-----------------------------------
+				var school_cnt = 0;
+				for(var i=0 ; i<document.memberRegForm.school.length; i++) {
+					if( document.memberRegForm.school[i].checked==true) {
+							school_cnt++;
+							break;
+						}
+				}
+				if( school_cnt==0 ) {
+					alert( "스킬은 1개 이상 입력 요망"); return;
+				}
+				*/
+				//+++++++++++++++++++++
+				// 거주지 유효성 체크하기 addr
+				//+++++++++++++++++++++
+
+				var addr = $(".addr").val();					
+				//-------------------------------
+				// 변수 addr 선언하고 class =addr 을 가진 태그를 관리하는 JQuery 객체 생성하고
+				// JQuery 객체의 메소드 val 을 호출하여 선택한 값을 리턴한다.
+				// 즉 선택한 [거주지]를 변수 addr 에 저장.
+				//-----------------------------------
+
+				// 선택한 [거주지] 가 없으면 경고하고 함수 중단.
+				if(addr=="") {
+					alert("거주지 입력 요망");
+					return;
+				}	
+				//+++++++++++++++++++++
+				// 생일 유효성 체크하기 		
+				//+++++++++++++++++++++
+				//생일 년,월,일 구하기   birth_year birth_month birth_date에 저장
+				var birth_year = $(".birth_year").val();		
+				var birth_month =$(".birth_month").val();		
+				var birth_date =  $(".birth_date").val();		
+				// 만약 생일 년,월,일이 입력되지 않았으면 경고하고 함수 중단하기
+					if(birth_year=="") {
+						alert("생일 년도 입력요망");
+							return;
+					}
+					if(birth_month=="") {
+						alert("생일 월 입력요망");
+							return;
+					}
+					if(birth_date=="") {
+						alert("생일 일수 입력요망");
+							return;
+					}
+			
+				//+++++++++++++++++++++
+				// 주민번호(7자리) 유효성 체크하기
+				//+++++++++++++++++++++
+				//-----------------------------------------------------------
+				//  입력된 첫째 주민번호 얻어와 변수 jumin_num 저장.
+				//	입력된 두번째 주민번호 얻어와 변수 jumin_num 저장.
+				//-----------------------------------------------------------
+				var jumin_num = $(".jumin_num").val();		
+				//-----------------------------------------------------------
+				//  입력된 주민번호가 없으면 경고하고 함수 중단.
+				//-----------------------------------------------------------
+				if( isEmpty(jumin_num)==true){
+					alert("주민번호는 필수 입력입니다.");
+					return;
+				}
+				//-----------------------------------------------------------
+				// is_valid_jumin_num 함수 호출하여 
+				//  입력된 주민번호가 합당하지 않으면 주민번호 비우고 함수 중단.
+				//-----------------------------------------------------------
+				if(  is_valid_jumin_num( jumin_num )==false) {
+					// 주민번호 비우기
+				 	$(".jumin_num").val("");
+					//오른쪽 처럼도 가능 =>  document.memberRegForm.jumin_num.value=""; // 비워라.	
+						return;
+				}	
+				//+++++++++++++++++++++
+				// 사진 유효성 체크. 
+				//+++++++++++++++++++++
+				//-----------------------------------------
+				// 선택한 [파일명]를 변수 pic 저장.
+				//------------------------------------------
+				var pic = $(".pic").val();
+				//-----------------------------------------
+				// 사진이 선택되지 않았으면 경고하고 함수 중단.
+				//------------------------------------------
+				if( isEmpty(pic)==true){
+					alert("사진 선택은 필수입니다!");
+					return;	
+				}
+				//+++++++++++++++++++++
+				// 숙지사항이 선택되지 않았으면 경고하고 함수 중단. var school_cnt = $(".school:checked").size(); 
+				//+++++++++++++++++++++
+
+				// class="skill" 를 가진 태그 중의 체크된 놈의 개수 구하기
+				var is_confirm_cnt = $(".is_confirm:checked").length; 
+					//--------------------------------------------
+					// 위 코딩은 아래 코딩과 동일하다
+					//--------------------------------------------
+					// var skill_cnt = $(".skill:checked").size();
+					// var skill_cnt = $(".skill").filter(":checked").length;
+					// var skill_cnt = $(".skill").filter(":checked").size();
+					// var skill_cnt = $("[name=skill]:checked").length;
+					// var skill_cnt = $("[name=skill]:checked").size();
+				// 만약 체크된 놈이 0개면 경고하고 함수 중단하기.
+				if(is_confirm_cnt==0)  {
+					alert("숙지사항 체크 요망!");return;
+				}
+				//+++++++++++++++++++++
+				// 
+				//+++++++++++++++++++++
+				document.memberRegForm.submit();
+			
+}
+
+	
+		</script>
+ </head>
+
+ <body>
+<!--jquery에서 가장 많이 사용하는것이 class값-->
+	<form name="memberRegForm" action="http://www.naver.com" enctype="multipart/form-data" method="post">
+	 <!------------------------------------------------------------------>
+	 <table border=1 cellpadding=5 cellspacing=0>
+	  <!------------------------------------------------------------------>
+			<caption>회원가입</caption>
+			<tr>
+					<th>아이디
+					<td><input type="text" name="uid"  class="uid" size=8>
+			</tr>
+			<tr>
+					<th>암호
+					<td><input type="password" name="pwd" class="pwd" size=8>
+			</tr>
+			<tr>
+					<th>암호확인
+					<td><input type="password" name="pwd_confirm"  class="pwd_confirm" size=8>
+			</tr>
+			<tr>
+					<th>소유스킬
+					<td>
+					<input type="checkbox" name="skill" class="skill"  value="Java">Java
+					<input type="checkbox" name="skill" class="skill"  value="JSP">JSP
+					<input type="checkbox" name="skill" class="skill"  value="Spring">Spring
+					<input type="checkbox" name="skill" class="skill"  value="Oracle">Oracle
+					<input type="checkbox" name="skill" class="skill"  value="mybatis">mybatis
+			</tr>
+			<tr>
+					<th>최종학력
+					<td>
+					<input type="radio" name="school"  class="school"  value="고졸">고졸
+					<input type="radio" name="school"  class="school"  value="전문대졸">전문대졸
+					<input type="radio" name="school"  class="school"  value="일반대졸">일반대졸
+			</tr>
+			<tr>
+				<th>거주지역
+				<td>
+					<select name="addr" class="addr" >
+					<option value="">-선택-
+					<option value="서울">서울
+					<option value="경기">경기
+					<option value="인천">인천
+					<option value="전라도">전라도
+					<option value="경상도">경상도
+					<option value="부산">부산
+					<option value="충청도">충청도
+					<option value="제주도">제주도
+					<option value="기타">기타
+					</select>
+			<tr>
+					<th>생일
+					<td>
+							<select name="birth_year"class="birth_year">
+								<option value="">
+							
+							<select>년
+							<select name="birth_month" class="birth_month">
+								<option value="">
+									
+							<select>월
+							<select name="birth_date"  class="birth_date">
+								<option value="">
+							</select>일	
+											
+			</tr>
+					<tr>
+					<th>주민번호
+					<td>
+					<input type="text"  name="jumin_num"  class="jumin_num" maxlength=7>  
+			</tr>
+					<tr>
+					<th>사진
+					<td><input type="file" name="pic" class="pic">  
+			</tr>		
+			<tr>
+					<th>숙지사항
+					<td>
+						입력하신 개인 정보는 회사 소유입니다.
+					<input type="checkbox" name="is_confirm"  class="is_confirm" value="확인">확인
+		</tr>
+		</table>
+	  <input type="button"  value="저장" class="save_member">
+	  <input type="reset"     value="초기화">
+	   </form>
+ </body>
+</html>
+
+<script>
+
+</script>
+
